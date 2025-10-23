@@ -27,6 +27,8 @@ permissions:
 
 #region Définition des jobs
 jobs:
+
+  #region JOB 1 - CI : Intégration continue
   ci_pipeline:
     runs-on: ubuntu-latest  # Runner Ubuntu GitHub
 
@@ -75,4 +77,53 @@ jobs:
           # notre action vient de la marketplace GitHub (pascalgn/automerge-action)
           # Elle automatise le merge de PR validées 
       #endregion
+  
+  #endregion
+
+  #region JOB 2 - CD : Tag + Release
+  create_release:
+    needs: ci_pipeline # Attendre la fin du job CI (test + automerge & delete de la branche subsidiaire)
+    runs-on: ubuntu-latest
+    # Condition
+    # - a PR vient d'ête fusionnée (cas principal)
+    # - Ou su un push direct a été effectué sur le main  (hotfix)
+    if: github.event.pull_request.merged == true || github.ref == 'refs/heads/main'
+
+    steps:
+      #region 1 : checkout propre pour le job CD
+      - name: Checkout du code
+        uses: actions/checkout@v4
+      #endregion
+
+      #region 2 : Création automatique d'un tag
+      - name: Créer un tag automatique
+        id : tag
+        uses : anothrNick/github-tag-action@1.75.0
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          DEFAULT_BUMP: patch
+          RELEASE_BRANCHES: main
+          # L'objectif de notre action est de calculé la prochaine version
+          # et créer un tag (1.0.2 => 1.0.3) => Bump par default PATCH
+      #endregion
+
+      #region 3 : Création de la Realase GitHub
+      - name: Créer un une release GitHub à partir du tag
+        uses: softprops/action-gh-release@v2.4.1
+        with:
+          tag_name: ${{steps.tag.outputs.new_tag}}
+          name: "Version ${{steps.tag.outputs.new_tag}}"
+          body: |
+            Nouvelle version publié automatiquement.
+
+            Détails du pipeline:
+              - Test unitaires validés
+              - Pull Request fusionné dans 'Main'
+              - Branche Feature supprimé (Trunk base)
+              - Tag & Release créés
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      #endregion
+  #endregion
+
 #endregion
