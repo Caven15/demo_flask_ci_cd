@@ -10,6 +10,9 @@ on:
   pull_request:
     branches: [main]
 
+  pull_request_target:
+    branches: [main]
+
   # Exécuter la CI à chaque push directe sur le main
   push:
     branches: [main]
@@ -19,7 +22,7 @@ on:
 #endregion
 
 #region Permissions minimales
-permissions: 
+permissions:
   contents: write
   pull-requests: write
 
@@ -28,7 +31,7 @@ permissions:
 #region Définition des jobs
 jobs:
   ci_pipeline:
-    runs-on: ubuntu-latest  # Runner Ubuntu GitHub
+    runs-on: ubuntu-latest # Runner Ubuntu GitHub
 
     steps:
       #region Étape 1 - Récupération du code source
@@ -41,7 +44,7 @@ jobs:
       - name: Configurer Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.11  # Adapter la version à celle utilisée par ton projet
+          python-version: 3.11 # Adapter la version à celle utilisée par ton projet
       #endregion
 
       #region Étape 3 - Installation des dépendances
@@ -50,14 +53,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt  # ⚠️ Le fichier doit inclure pytest
       #endregion
-
       #region Étape 4 - Exécution des tests unitaires
       - name: Lancer les tests unitaires
         run: |
           export PYTHONPATH=.
           pytest -v
       #endregion
-
       #region Étape 5 - Auto-merge de la pull request
       - name: Auto merge de la pull request
         # notre étape ne s'executera que si :
@@ -67,11 +68,12 @@ jobs:
         uses: pascalgn/automerge-action@v0.16.4
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # authentification GitHub
-          MERGE_METHOD: squash                    # Fusion en squash (compacter tout les commit)
-          MERGE_DELETE_BRANCH: true               # supprimer la branche une fusionnée
-          MERGE_RETRIES: 6                        # réessaie jusqu'a 6 si la PR n'est pas encore prête
-          MERGE_RETRIES_SLEEP: 10000              # délai (ms) entre chaque tentative
+          MERGE_METHOD: squash # Fusion en squash (compacter tout les commit)
+          MERGE_DELETE_BRANCH: true # supprimer la branche une fusionnée
+          MERGE_LABELS: ready-to-merge # label requis pour merger la PR
+          MERGE_RETRIES: 6 # réessaie jusqu'a 6 si la PR n'est pas encore prête
+          MERGE_RETRIES_SLEEP: 10000 # délai (ms) entre chaque tentative
           # notre action vient de la marketplace GitHub (pascalgn/automerge-action)
-          # Elle automatise le merge de PR validées 
+          # Elle automatise le merge de PR validées
       #endregion
 #endregion
