@@ -69,6 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # authentification GitHub
           MERGE_METHOD: squash                    # Fusion en squash (compacter tout les commit)
           MERGE_DELETE_BRANCH: true               # supprimer la branche une fusionnée
+          MERGE_LABELS: ""                        # LAbel requis pour un merge
           MERGE_RETRIES: 6                        # réessaie jusqu'a 6 si la PR n'est pas encore prête
           MERGE_RETRIES_SLEEP: 10000              # délai (ms) entre chaque tentative
           # notre action vient de la marketplace GitHub (pascalgn/automerge-action)
