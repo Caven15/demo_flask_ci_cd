@@ -61,7 +61,7 @@ jobs:
         # - tout les test précédent qui on reussi (success())
         # - l'événement est une 'pull_request' (et non un push direct)
         if: ${{success() && github.event_name == 'pull_request'}}
-        uses: pascalgn/automerge-action@0.14.3
+        uses: pascalgn/automerge-action@v0.16.4
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # authentification GitHub
           MERGE_METHOD: squash                    # Fusion en squash (compacter tout les commit)
