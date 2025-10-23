@@ -82,9 +82,8 @@ def test_put_book(client):
 	assert data["author"] == "test_update_author"
 
 def test_put_book_not_found(client):
-	response = client.put("/api/books/999", json={"title": "x", "author": "y"})
+	response = client.put("/api/books/999", json={"title": "titi", "author": "toto"})
 	assert response.status_code == 404
-
 
 #endregion
 

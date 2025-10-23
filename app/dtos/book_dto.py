@@ -45,6 +45,10 @@ class BookCreateDTO:
 		if len(title) > 100:
 			return None, {"error": "Le titre ne peux pas dépasser 100 caractères."}
 
+		print("---------------------------------------")
+		print(author)
+		print("---------------------------------------")
+
 		if not author:
 			return None, {"error": "Le nom de l'auteur est obligatoire"}
 		if len(author) < 3:
