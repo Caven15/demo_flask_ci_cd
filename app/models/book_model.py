@@ -5,7 +5,7 @@ class Book:
 		self.author = author
 
 	def to_dict(self) -> dict:
-		"""Conversion utilitaire pour la sérialisation en JSON"""
+		"""Conversion utilitaire vers un dictionnaire pour la sérialisation en JSON"""
 		return {
 			"id" : self.id,
 			"title" : self.title,
