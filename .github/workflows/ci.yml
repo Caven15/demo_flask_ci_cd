@@ -19,7 +19,10 @@ on:
 #endregion
 
 #region Permissions minimales
-permissions: {}
+permissions: 
+  contents: write
+  pull-requests: write
+
 #endregion
 
 #region Définition des jobs
