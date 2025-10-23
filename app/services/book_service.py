@@ -50,3 +50,7 @@ def delete_book(book_id : int) -> bool:
 		return False
 	BOOKS.remove(book)
 	return True
+
+def search_book_by_author(author : str) -> list[Book]:
+	"""Recherche les livre d'un auteur donné"""
+	return [b for b in BOOKS if author.lower() in b.author.lower()]

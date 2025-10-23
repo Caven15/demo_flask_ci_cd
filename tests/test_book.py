@@ -38,6 +38,14 @@ def test_get_single_book(client):
 	assert data["title"] == "Harry Potter"
 	assert data["author"] == "JK Rowling"
 
+def test_search_books(client):
+	response = client.get("/api/books/search?author=Dieu")
+
+	assert response.status_code == 200
+	data = response.get_json()
+	assert isinstance(data, list)
+	assert all("Dieu" in b["author"] for b in data)
+
 # endregion
 
 #region POST
