@@ -40,6 +40,7 @@ def init_routes(app: Flask) -> None:
 		view_func=lambda id: book_controller.remove_book(id),
 		methods=["DELETE"]
 	)
+ 	# route search
 	app.add_url_rule(
 		"/api/books/search",
 		endpoint="search_book",
