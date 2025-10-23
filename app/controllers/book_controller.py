@@ -10,7 +10,8 @@ from app.services.book_service import (
     add_book,
     update_book,
     patch_book,
-    delete_book
+    delete_book,
+    search_book_by_author
 )
 
 from flask import jsonify, request
@@ -71,3 +72,12 @@ def remove_book(id: int):
 	if deleted:
 		return "", 204
 	return jsonify({"error" : "Livre non trouvé"}), 404
+
+def search_book():
+	"""EndPoint : DELETE /api/books/search?author=Nom"""
+	author = request.args.get("author", "")
+	if not author:
+		return jsonify({"error": "Paramètre 'author' requis"}), 400
+
+	books = search_book_by_author(author)
+	return jsonify([b.to_dict() for b in books]), 200
