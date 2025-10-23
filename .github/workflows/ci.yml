@@ -54,4 +54,21 @@ jobs:
           export PYTHONPATH=.
           pytest -v
       #endregion
+
+      #region Étape 5 - Auto-merge de la pull request
+      - name: Auto merge de la pull request
+        # notre étape ne s'executera que si :
+        # - tout les test précédent qui on reussi (success())
+        # - l'événement est une 'pull_request' (et non un push direct)
+        if: ${{success() && github.event_name == 'pull_request'}}
+        uses: pascalgn/automerge-action@0.15.6
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # authentification GitHub
+          MERGE_METHOD: squash                    # Fusion en squash (compacter tout les commit)
+          MERGE_DELETE_BRANCH: true               # supprimer la branche une fusionnée
+          MERGE_RETRIES: 6                        # réessaie jusqu'a 6 si la PR n'est pas encore prête
+          MERGE_RETRIES_SLEEP: 10000              # délai (ms) entre chaque tentative
+          # notre action vient de la marketplace GitHub (pascalgn/automerge-action)
+          # Elle automatise le merge de PR validées 
+      #endregion
 #endregion
