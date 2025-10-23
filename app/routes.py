@@ -25,21 +25,22 @@ def init_routes(app: Flask) -> None:
 	app.add_url_rule(
 		"/api/books/<int:id>",
 		endpoint="update_book_full",
-		view_func=lambda id : book_controller.update_book_full(id),
+		view_func=lambda id: book_controller.update_book_full(id),
 		methods=["PUT"]
 	)
 	app.add_url_rule(
 		"/api/books/<int:id>",
 		endpoint="update_book_partial",
-		view_func=lambda id : book_controller.update_book_partial(id),
+		view_func=lambda id: book_controller.update_book_partial(id),
 		methods=["PATCH"]
 	)
 	app.add_url_rule(
 		"/api/books/<int:id>",
 		endpoint="delete_book",
-		view_func=lambda id : book_controller.remove_book(id),
+		view_func=lambda id: book_controller.remove_book(id),
 		methods=["DELETE"]
 	)
+ 	# route search
 	app.add_url_rule(
 		"/api/books/search",
 		endpoint="search_book",
